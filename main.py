@@ -7,6 +7,9 @@ screen = pygame.display.set_mode(size)
 running =  True
 pygame.display.set_caption("Space Invaders")
 
+icon = pygame.image.load('ufo.png')
+pygame.display.set_icon(icon)
+
 color = 0, 0, 0
 
 while running:
