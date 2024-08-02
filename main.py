@@ -5,40 +5,13 @@ from pygame import mixer,mixer_music
 
 pygame.init()
 
-class Button:
-    def __init__(self):
-        pass
 
-
-class Player():
-    x = 370
-    y = 530
-    def __init__(self):
-        pass
-
-    def create(self,screen):
-        playerImg = pygame.image.load(r'player.png')
-        playerImg = pygame.transform.scale(playerImg, (50, 50)) 
-        screen.blit(playerImg,(x,y))
-
-class Enemy():
-    x = random.randrange(0,799) 
-    y = random.randrange(0,200)
-    def __init__(self,transform=False):
-        self.transform = transform
-    def create(self,screen):
-        enemyImg = pygame.image.load(r'alien.png')
-        if self.transform == True:
-            enemyImg = pygame.transform.scale(enemyImg,(50,50))
-        screen.blit(enemyImg,(x,y))
 
 
 
 
     
-# mixer_music.load('palms.wav')
-# mixer_music.play(-1)
-# mixer_music.set_volume(0.2)
+
 mixer.music.load('palms.wav')
 mixer.music.play(-1)
 mixer.music.set_volume(0.2)
@@ -110,8 +83,7 @@ gameoverText = pygame.font.Font('freesansbold.ttf',64)
 #defining a font
 out_of_bounds = True
 
-# font = pygame.font.Font(None,20)
-# red_button = font.render("manual", True, (0,255,0),(255, 0, 0))
+
 
 # Create a surface for the button
 red_button = pygame.Surface((70, 50))
@@ -192,8 +164,7 @@ def show_score():
 
 number = 0
 knum = 0
-#print(f'{pygame.font.get_init()}')
-#print(red_button.get_size())
+
 rocketImg = pygame.image.load(r'missile.png')
 rocketImg = pygame.transform.scale(rocketImg,(25,25))
 rocket_X = 0
@@ -213,36 +184,27 @@ while running:
     clock.tick(240)
     mouse = pygame.mouse.get_pos()
     
-    #print(mouse)
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
-        # if event.type == pygame.KEYDOWN:
-        #     if event.key == pygame.K_SPACE:
-        #         print("Fire!")
-        #         fire(playerX,rocket_Y)
-        #         rocket_Y -= rocket_change
-
-
-        # if event.type == pygame.K_SPACE:
-        #     print("Fired")
-        #     fire(playerX,playerY)    
+         
         pos = pygame.mouse.get_pos()
         x,y = pos
 
 
-        #print(pos)
+        
 
-        #print(f'Collide:{red_button.get_rect().collidepoint(pos)}')
+        
         if red_button.get_rect().collidepoint(pos):
-            #print(red_button.get_size())
+            
             if pygame.mouse.get_pressed()[0] == True:
                 manual = True
                 auto = False
                 number = number + 1
 
-        #print(f'Clicked:{number%2==0}')    
+           
         if number % 2 == 0:
             auto = True
             manual = False
@@ -253,7 +215,7 @@ while running:
         if auto == True:
             rendertext('Auto',red_button,(255,0,0))
 
-        #print(f'Auto:{auto},Manual:{manual}')
+        
         
         if auto == True:
             Xaxis_change = automove(Xaxis_change)
@@ -264,15 +226,14 @@ while running:
         playerX = usermove(playerX)
 
 
-    #print(f'rocket_Y={rocket_Y}')
+    
 
     key_pressed = pygame.key.get_pressed() 
     if key_pressed[pygame.K_SPACE] or key_pressed[pygame.MOUSEBUTTONUP]:
         if rocket_state == 'ready': #to make sure rocket dosent follow the player
             temp = playerX
         rocket_state = 'fired'
-        #temp = playerX
-        #print(f'State:{rocket_state}')
+        
     if rocket_Y < 0: #TO FIRE MULTIPLE BULLETS
         rocket_Y = 530
         rocket_state = 'ready'
@@ -280,9 +241,9 @@ while running:
     if (rocket_state == 'fired'):
         fired_effect = mixer.Sound('laser.wav')
         fired_effect.play()
-        #print(f'State:{rocket_state}')
+        
         screen.blit(rocketImg,(temp+13,rocket_Y-20))
-        #rocket_Y -= 5
+        
         rocket_Y -= 2.5
         if (rocket_Y >= size[1]):
             rocket_state = 'ready'
@@ -305,7 +266,7 @@ while running:
                 enemyY[j] = 1000
             gameover()
             pygame.time.delay(5000)
-            #running = False
+            
             
         if enemyX[i] <= 0:
             enemyXaxis_change[i] = 0.3
@@ -322,8 +283,7 @@ while running:
             rocket_Y = 530
             temp = playerX
             score += 1
-            #print(f'Score:{score}')
-            #print('Killed')
+            
             killed[i] = True
             kill_effect = mixer.Sound('explosion.wav')
             kill_effect.play()
@@ -331,7 +291,7 @@ while running:
 
         
         if killed[i] == False:
-        #print('Not killed')
+        
             enemy(enemyX[i],enemyY[i],i)
         
         
@@ -340,9 +300,7 @@ while running:
         
     player(playerX,playerY) #draw player over the screen
     
-    #Player().create(screen)
-    #print(f'Enemy (x,y):{(enemyX,enemyY)}')
-
+    
     
 
     screen.blit(show_score(),(700,50))
@@ -352,6 +310,6 @@ while running:
     
     pygame.display.update()
 
-# pygame.time.delay(300)
+
 
 pygame.quit()
