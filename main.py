@@ -6,13 +6,7 @@ from pygame import mixer,mixer_music
 pygame.init()
 
 
-
-
-
-
-    
-
-mixer.music.load('palms.wav')
+mixer.music.load('assets/palms.wav')
 mixer.music.play(-1)
 mixer.music.set_volume(0.2)
 
@@ -23,10 +17,10 @@ screen = pygame.display.set_mode(size)
 running =  True
 pygame.display.set_caption("Space Invaders")
 
-icon = pygame.image.load(r'ufo.png')
+icon = pygame.image.load(r'assets/ufo.png')
 pygame.display.set_icon(icon)
 
-background = pygame.image.load(r'background.jpg')
+background = pygame.image.load(r'assets/background.jpg')
 background = pygame.transform.scale(background, (size[0], size[1]))
 
 color = 0, 0, 0
@@ -58,7 +52,7 @@ enemyImg = []
 num_of_enemies = 4
 
 for i in range(num_of_enemies):
-    enemyImg.append(pygame.image.load(r'alien.png'))
+    enemyImg.append(pygame.image.load(r'assets/alien.png'))
     enemyX.append(random.randrange(0,799))
     enemyY.append(random.randrange(50,200))
     enemyXaxis_change.append(0.3)
@@ -104,18 +98,22 @@ def rendertext(text,button,color=(255, 0, 0)):
 
 rendertext("Auto",red_button,(255, 255, 255))
 
-def gameover():
-    over_text = gameoverText.render('Game Over',True,(255,255,255))
+def gameover(list):
+    check = all([x>900 for x in list])
+    if check:
+        over_text = gameoverText.render('You Won',True,(255,255,255))
+    else:
+        over_text = gameoverText.render('Game Over',True,(255,255,255))
     screen.blit(over_text,(200,300))
 
 
 def player(x,y):
-    playerImg = pygame.image.load(r'player.png')
+    playerImg = pygame.image.load(r'assets/player.png')
     playerImg = pygame.transform.scale(playerImg, (50, 50)) 
     screen.blit(playerImg,(x,y))
 
 def fire(x,y):
-    rocketImg = pygame.image.load(r'missile.png')
+    rocketImg = pygame.image.load(r'assets/missile.png')
     rocketImg = pygame.transform.scale(rocketImg,(25,25))
     screen.blit(rocketImg,(x+13,y-20))
 
@@ -123,7 +121,7 @@ def fire(x,y):
 
 def ifKilled(rocketX,rocketY,enemyX,enemyY):
     a = math.pow(rocketX-enemyX,2)
-    b = math.pow(rocket_Y-enemyY,2)
+    b = math.pow(rocketY-enemyY,2)
     distance = math.sqrt((a+b))
     if distance < 15:
         return True
@@ -165,7 +163,7 @@ def show_score():
 number = 0
 knum = 0
 
-rocketImg = pygame.image.load(r'missile.png')
+rocketImg = pygame.image.load(r'assets/missile.png')
 rocketImg = pygame.transform.scale(rocketImg,(25,25))
 rocket_X = 0
 
@@ -239,7 +237,7 @@ while running:
         rocket_state = 'ready'
     
     if (rocket_state == 'fired'):
-        fired_effect = mixer.Sound('laser.wav')
+        fired_effect = mixer.Sound('assets/laser.wav')
         fired_effect.play()
         
         screen.blit(rocketImg,(temp+13,rocket_Y-20))
@@ -264,8 +262,9 @@ while running:
         if enemyY[i] > 600:
             for j in range(num_of_enemies):
                 enemyY[j] = 1000
-            gameover()
-            pygame.time.delay(5000)
+            gameover(enemyY)
+            #pygame.time.delay(5000)
+            #running = False
             
             
         if enemyX[i] <= 0:
@@ -285,7 +284,7 @@ while running:
             score += 1
             
             killed[i] = True
-            kill_effect = mixer.Sound('explosion.wav')
+            kill_effect = mixer.Sound('assets/explosion.wav')
             kill_effect.play()
             
 
@@ -293,6 +292,9 @@ while running:
         if killed[i] == False:
         
             enemy(enemyX[i],enemyY[i],i)
+
+
+        #print(enemyY)
         
         
     
